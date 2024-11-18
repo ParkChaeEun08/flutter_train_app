@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class StationListPage extends StatelessWidget {
   final String stationType;
+  final String exclusion;
 
-  StationListPage({super.key, required this.stationType});
+  StationListPage(
+      {super.key, required this.stationType, required this.exclusion});
 
   final List<String> stations = [
     '수서',
@@ -21,19 +23,22 @@ class StationListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> filteredStations =
+        stations.where((station) => station != exclusion).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(stationType),
       ),
       body: ListView.separated(
-        itemCount: stations.length,
+        itemCount: filteredStations.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(stations[index],
+            title: Text(filteredStations[index],
                 style:
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             onTap: () {
-              Navigator.pop(context, stations[index]);
+              Navigator.pop(context, filteredStations[index]);
             },
           );
         },

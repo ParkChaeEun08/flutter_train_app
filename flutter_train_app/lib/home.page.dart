@@ -6,8 +6,22 @@ void main() {
   runApp(const FlutterTrainApp());
 }
 
-class FlutterTrainApp extends StatelessWidget {
+class FlutterTrainApp extends StatefulWidget {
   const FlutterTrainApp({super.key});
+
+  @override
+  _FlutterTrainAppState createState() => _FlutterTrainAppState();
+}
+
+class _FlutterTrainAppState extends State<FlutterTrainApp> {
+  ThemeMode _themeMode = ThemeMode.light;
+
+  void _toggleTheme() {
+    setState(() {
+      _themeMode =
+          _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +29,24 @@ class FlutterTrainApp extends StatelessWidget {
       title: 'Flutter Train App',
       theme: ThemeData(
         primarySwatch: Colors.purple,
+        brightness: Brightness.light,
       ),
-      home: const HomePage(),
+      darkTheme: ThemeData(
+        primarySwatch: Colors.purple,
+        brightness: Brightness.dark,
+      ),
+      themeMode: _themeMode,
+      home: HomePage(toggleTheme: _toggleTheme),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final VoidCallback toggleTheme;
+
+  const HomePage({super.key, required this.toggleTheme});
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
@@ -38,6 +59,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('기차 예매'),
+        actions: [
+          IconButton(
+            icon: Icon(Theme.of(context).brightness == Brightness.dark
+                ? Icons.dark_mode
+                : Icons.light_mode),
+            onPressed: widget.toggleTheme,
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -85,7 +114,7 @@ class _HomePageState extends State<HomePage> {
         height: 200,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -111,7 +140,11 @@ class _HomePageState extends State<HomePage> {
     final selectedStation = await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => StationListPage(stationType: stationType)),
+          builder: (context) => StationListPage(
+                stationType: stationType,
+                exclusion:
+                    stationType == '출발역' ? _arrivalStation : _departureStation,
+              )),
     );
 
     if (selectedStation != null) {
