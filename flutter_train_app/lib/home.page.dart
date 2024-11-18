@@ -6,6 +6,7 @@ void main() {
   runApp(const FlutterTrainApp());
 }
 
+// Stateflulwidget 으로 변경해서 테마 모드 관리
 class FlutterTrainApp extends StatefulWidget {
   const FlutterTrainApp({super.key});
 
@@ -13,6 +14,7 @@ class FlutterTrainApp extends StatefulWidget {
   _FlutterTrainAppState createState() => _FlutterTrainAppState();
 }
 
+// 초기 테마 모드를 라이트 모드로 설정
 class _FlutterTrainAppState extends State<FlutterTrainApp> {
   ThemeMode _themeMode = ThemeMode.light;
 
@@ -76,16 +78,19 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                // 출발역 선택
                 _buildStationSelectionBox('출발역', _departureStation, () {
                   _navigateToStationListPage('출발역');
                 }),
                 const SizedBox(width: 20),
+                // 도착역 선택
                 _buildStationSelectionBox('도착역', _arrivalStation, () {
                   _navigateToStationListPage('도착역');
                 }),
               ],
             ),
             const SizedBox(height: 20),
+            // 좌석 선택 버튼, 출발역과 도착역이 선택되야지 활성화
             ElevatedButton(
               onPressed: _departureStation != '선택' && _arrivalStation != '선택'
                   ? () {
@@ -136,6 +141,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+// 역 선택 페이지로 이동하는 함수
+// 이미 선택한 역을 제외
   void _navigateToStationListPage(String stationType) async {
     final selectedStation = await Navigator.push(
       context,

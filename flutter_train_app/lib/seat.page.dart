@@ -1,10 +1,11 @@
-// ignore_for_file: library_private_types_in_public_api
+// library_private_types_in_public_api 경고를 무시함
 
 import 'package:flutter/material.dart';
 
+// StatefulWidget을 사용하여 좌석 선택 페이지를 만듦
 class SeatPage extends StatefulWidget {
-  final String departureStation;
-  final String arrivalStation;
+  final String departureStation; // 출발역
+  final String arrivalStation; // 도착역
 
   const SeatPage({
     super.key,
@@ -17,6 +18,7 @@ class SeatPage extends StatefulWidget {
 }
 
 class _SeatPageState extends State<SeatPage> {
+  // 좌석 선택 상태를 저장하는 리스트를 생성, 초기화
   List<List<bool>> seatSelection =
       List.generate(4, (_) => List.filled(20, false));
 
@@ -49,7 +51,9 @@ class _SeatPageState extends State<SeatPage> {
               ),
             ),
             const SizedBox(height: 20),
+            // 좌석을 빌드하는 함수 호출
             Expanded(child: _buildSeats()),
+            // 좌석 선택 확인 버튼, 선택된 좌석이 있을 때만 활성화
             ElevatedButton(
               onPressed: _hasSelectedSeat()
                   ? () => _showConfirmationDialog(context)
@@ -65,6 +69,7 @@ class _SeatPageState extends State<SeatPage> {
     );
   }
 
+  // 좌석을 빌드하는 함수
   Widget _buildSeats() {
     return SingleChildScrollView(
       child: Column(
@@ -82,6 +87,7 @@ class _SeatPageState extends State<SeatPage> {
             ],
           ),
           const SizedBox(height: 8),
+          // 좌석 번호를 표시하는 위젯 빌드
           for (int i = 0; i < 20; i++)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -110,6 +116,7 @@ class _SeatPageState extends State<SeatPage> {
     );
   }
 
+  // 좌석 열 레이블을 빌드하는 함수
   Widget _buildSeatHeader(String rowLabel) {
     return SizedBox(
       width: 50,
@@ -123,6 +130,7 @@ class _SeatPageState extends State<SeatPage> {
     );
   }
 
+  // 좌석을 빌드하고 선택 기능을 추가하는 함수
   Widget _buildSeat(int seatIndex, String rowLabel, int index) {
     return GestureDetector(
       onTap: () {
@@ -144,6 +152,7 @@ class _SeatPageState extends State<SeatPage> {
     );
   }
 
+  // 선택된 좌석이 있는지 확인하는 함수
   bool _hasSelectedSeat() {
     for (var row in seatSelection) {
       if (row.contains(true)) {
@@ -153,6 +162,7 @@ class _SeatPageState extends State<SeatPage> {
     return false;
   }
 
+  // 예매 확인 대화 상자를 표시하는 함수
   void _showConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
